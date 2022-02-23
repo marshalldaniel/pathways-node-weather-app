@@ -6,12 +6,24 @@ variable "subnet_public3_cidr" {}
 variable "subnet_private1_cidr" {}
 variable "subnet_private2_cidr" {}
 variable "subnet_private3_cidr" {}
-variable "subnet_public1_az" {}
-variable "subnet_public2_az" {}
-variable "subnet_public3_az" {}
-variable "subnet_private1_az" {}
-variable "subnet_private2_az" {}
-variable "subnet_private3_az" {}
+variable "subnet_public1_az" {
+    default = "${var.region}a"
+}
+variable "subnet_public2_az" {
+    default = "${var.region}b"
+}
+variable "subnet_public3_az" {
+    default = "${var.region}c"
+}
+variable "subnet_private1_az" {
+    default = "${var.region}a"
+}
+variable "subnet_private2_az" {
+    default = "${var.region}b"
+}
+variable "subnet_private3_az" {
+    default = "${var.region}c"
+}
 
 
 ################################################################################

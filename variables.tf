@@ -61,31 +61,31 @@ variable "subnet_public3_cidr" {
 variable "subnet_public1_az" {
   type        = string
   description = "Availability zone to use for public subnet 1"
-  default     = "${local.region}a"
+  default     = ""
 }
 
 variable "subnet_public2_az" {
   type        = string
   description = "Availability zone to use for public subnet 2"
-  default     = "${local.region}b"
+  default     = ""
 }
 
 variable "subnet_public3_az" {
   type        = string
   description = "Availability zone to use for public subnet 3"
-  default     = "${local.region}c"
+  default     = ""
 }
 
 variable "subnet_private1_az" {
   type        = string
   description = "Availability zone to use for private subnet 1"
-  default     = "${local.region}a"
+  default     = ""
 }
 
 variable "subnet_private2_az" {
   type        = string
   description = "Availability zone to use for private subnet 2"
-  default     = "${local.region}b"
+  default     = ""
 }
 
 variable "subnet_private3_az" {
