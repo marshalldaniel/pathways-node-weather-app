@@ -1,8 +1,8 @@
 variable "region" {
-    default     = ""
+    type        = string
 }
 variable "vpc_cidr" {
-    default     = ""
+    type        = string
 }
 variable "subnet_public1_cidr" {
     default     = ""
