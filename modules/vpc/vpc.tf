@@ -22,25 +22,14 @@ variable "subnet_private2_cidr" {
 variable "subnet_private3_cidr" {
     default     = ""
 }
-variable "subnet_public1_az" {
-    default = "${var.region}a"
+locals {
+    subnet_public1_az = "${var.region}a",
+    subnet_public2_az = "${var.region}b",
+    subnet_public3_az = "${var.region}c",
+    subnet_private1_az = "${var.region}a",
+    subnet_private2_az = "${var.region}b",
+    subnet_private3_az = "${var.region}c"
 }
-variable "subnet_public2_az" {
-    default = "${var.region}b"
-}
-variable "subnet_public3_az" {
-    default = "${var.region}c"
-}
-variable "subnet_private1_az" {
-    default = "${var.region}a"
-}
-variable "subnet_private2_az" {
-    default = "${var.region}b"
-}
-variable "subnet_private3_az" {
-    default = "${var.region}c"
-}
-
 
 ################################################################################
 # VPC
@@ -125,7 +114,7 @@ resource "aws_route_table" "private3" {
 resource "aws_subnet" "public1" {
   vpc_id                          = aws_vpc.this.id
   cidr_block                      = var.subnet_public1_cidr
-  availability_zone               = var.subnet_public1_az
+  availability_zone               = local.subnet_public1_az
 
   tags = {
       Name = "marshalldaniel-subnet-public1"
@@ -135,7 +124,7 @@ resource "aws_subnet" "public1" {
 resource "aws_subnet" "public2" {
   vpc_id                          = aws_vpc.this.id
   cidr_block                      = var.subnet_public2_cidr
-  availability_zone               = var.subnet_public2_az
+  availability_zone               = local.subnet_public2_az
 
   tags = {
       Name = "marshalldaniel-subnet-public2"
@@ -145,7 +134,7 @@ resource "aws_subnet" "public2" {
 resource "aws_subnet" "public3" {
   vpc_id                          = aws_vpc.this.id
   cidr_block                      = var.subnet_public3_cidr
-  availability_zone               = var.subnet_public3_az
+  availability_zone               = local.subnet_public3_az
 
   tags = {
       Name = "marshalldaniel-subnet-public3"
@@ -159,7 +148,7 @@ resource "aws_subnet" "public3" {
 resource "aws_subnet" "private1" {
   vpc_id                          = aws_vpc.this.id
   cidr_block                      = var.subnet_private1_cidr
-  availability_zone               = var.subnet_private1_az
+  availability_zone               = local.subnet_private1_az
 
   tags = {
       Name = "marshalldaniel-subnet-private1"
@@ -169,7 +158,7 @@ resource "aws_subnet" "private1" {
 resource "aws_subnet" "private2" {
   vpc_id                          = aws_vpc.this.id
   cidr_block                      = var.subnet_private2_cidr
-  availability_zone               = var.subnet_private2_az
+  availability_zone               = local.subnet_private2_az
 
   tags = {
       Name = "marshalldaniel-subnet-private2"
@@ -179,7 +168,7 @@ resource "aws_subnet" "private2" {
 resource "aws_subnet" "private3" {
   vpc_id                          = aws_vpc.this.id
   cidr_block                      = var.subnet_private3_cidr
-  availability_zone               = var.subnet_private3_az
+  availability_zone               = local.subnet_private3_az
 
   tags = {
       Name = "marshalldaniel-subnet-private3"
