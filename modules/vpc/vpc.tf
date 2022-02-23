@@ -1,6 +1,6 @@
-# variable "region" {
-#     default     = ""
-# }
+variable "region" {
+    default     = ""
+}
 variable "vpc_cidr" {
     default     = ""
 }

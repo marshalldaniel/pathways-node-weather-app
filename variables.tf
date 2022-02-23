@@ -58,38 +58,38 @@ variable "subnet_public3_cidr" {
   default     = "10.0.5.224/28"
 }
 
-variable "subnet_public1_az" {
-  type        = string
-  description = "Availability zone to use for public subnet 1"
-  default     = ""
-}
+# variable "subnet_public1_az" {
+#   type        = string
+#   description = "Availability zone to use for public subnet 1"
+#   default     = ""
+# }
 
-variable "subnet_public2_az" {
-  type        = string
-  description = "Availability zone to use for public subnet 2"
-  default     = ""
-}
+# variable "subnet_public2_az" {
+#   type        = string
+#   description = "Availability zone to use for public subnet 2"
+#   default     = ""
+# }
 
-variable "subnet_public3_az" {
-  type        = string
-  description = "Availability zone to use for public subnet 3"
-  default     = ""
-}
+# variable "subnet_public3_az" {
+#   type        = string
+#   description = "Availability zone to use for public subnet 3"
+#   default     = ""
+# }
 
-variable "subnet_private1_az" {
-  type        = string
-  description = "Availability zone to use for private subnet 1"
-  default     = ""
-}
+# variable "subnet_private1_az" {
+#   type        = string
+#   description = "Availability zone to use for private subnet 1"
+#   default     = ""
+# }
 
-variable "subnet_private2_az" {
-  type        = string
-  description = "Availability zone to use for private subnet 2"
-  default     = ""
-}
+# variable "subnet_private2_az" {
+#   type        = string
+#   description = "Availability zone to use for private subnet 2"
+#   default     = ""
+# }
 
-variable "subnet_private3_az" {
-  type        = string
-  description = "Availability zone to use for private subnet 3"
-  default     = "${local.region}c"
-}
+# variable "subnet_private3_az" {
+#   type        = string
+#   description = "Availability zone to use for private subnet 3"
+#   default     = "${local.region}c"
+# }
