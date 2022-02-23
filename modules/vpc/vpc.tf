@@ -23,11 +23,11 @@ variable "subnet_private3_cidr" {
     default     = ""
 }
 locals {
-    subnet_public1_az = "${var.region}a",
-    subnet_public2_az = "${var.region}b",
-    subnet_public3_az = "${var.region}c",
-    subnet_private1_az = "${var.region}a",
-    subnet_private2_az = "${var.region}b",
+    subnet_public1_az = "${var.region}a"
+    subnet_public2_az = "${var.region}b"
+    subnet_public3_az = "${var.region}c"
+    subnet_private1_az = "${var.region}a"
+    subnet_private2_az = "${var.region}b"
     subnet_private3_az = "${var.region}c"
 }
 
