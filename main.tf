@@ -7,8 +7,6 @@ module "s3_bucket" {
 
 module "vpc" {
   source = "./modules/vpc"
-
-  tags = var.tags
 }
 
 output "bucket_name" {
