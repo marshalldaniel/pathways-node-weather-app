@@ -1,11 +1,27 @@
-variable "region" {}
-variable "vpc_cidr" {}
-variable "subnet_public1_cidr" {}
-variable "subnet_public2_cidr" {}
-variable "subnet_public3_cidr" {}
-variable "subnet_private1_cidr" {}
-variable "subnet_private2_cidr" {}
-variable "subnet_private3_cidr" {}
+variable "region" {
+    default     = ""
+}
+variable "vpc_cidr" {
+    default     = ""
+}
+variable "subnet_public1_cidr" {
+    default     = ""
+}
+variable "subnet_public2_cidr" {
+    default     = ""
+}
+variable "subnet_public3_cidr" {
+    default     = ""
+}
+variable "subnet_private1_cidr" {
+    default     = ""
+}
+variable "subnet_private2_cidr" {
+    default     = ""
+}
+variable "subnet_private3_cidr" {
+    default     = ""
+}
 variable "subnet_public1_az" {
     default = "${var.region}a"
 }
