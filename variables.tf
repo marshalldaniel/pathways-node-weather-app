@@ -1,95 +1,77 @@
-variable "region" {
+################################################################################
+### Tag variables
+################################################################################
+variable "set_username_prefix" {
   type        = string
-  description = "Specifies the aws region to use"
-  default     = "ap-southeast-1"
+  description = "Name to be used on all the resources as identifier"
+  default     = "marshalldaniel"
 }
+
+variable "set_custom_tags" {
+  type        = map(string)
+  description = "Use tags to identify project resources"
+  default = {
+    Project_Name = "pathways-node-weather-app"
+  }
+}
+
+################################################################################
+### terraform_vpc module variables
+################################################################################
+variable "set_vpc_cidr_range" {
+  type        = string
+  description = "The CIDR block for the VPC. Default value is a valid CIDR, but not acceptable by AWS and should be overridden"
+  default     = "10.0.5.0/24"
+}
+
+variable "create_private_subnets" {
+  type        = list(string)
+  description = "A list of private subnets inside the VPC"
+  default     = ["10.0.5.0/26", "10.0.5.64/26", "10.0.5.128/26"]
+}
+
+variable "create_public_subnets" {
+  type        = list(string)
+  description = "A list of public subnets inside the VPC"
+  default     = ["10.0.5.192/28", "10.0.5.208/28", "10.0.5.224/28"]
+}
+
+variable "get_azs" {
+  type        = list(string)
+  description = "A list of availability zones names or ids in the region"
+  default     = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+}
+
+variable "create_igw" {
+  type        = bool
+  description = "Controls if an Internet Gateway is created for public subnets and the related routes that connect them"
+  default     = true
+}
+
+variable "enable_nat_gateway" {
+  type        = bool
+  description = "Should be true if you want to provision NAT Gateways for each of your private networks"
+  default     = true
+}
+
+variable "create_nat_gateway_per_az" {
+  type        = bool
+  description = "Should be true if you want only one NAT Gateway per availability zone. Requires `var.azs` to be set, and the number of `public_subnets` created to be greater than or equal to the number of availability zones specified in `var.azs`"
+  default     = true
+}
+
+variable "set_s3_gateway_endpoint" {
+  type        = string
+  description = "Specifies the service name for the gateway endpoint"
+  default     = "com.amazonaws.ap-southeast-1.s3"
+}
+
+################################################################################
+### S3 module variables
+################################################################################
 
 variable "bucket" {
   type        = string
   description = "Specifies the name of an S3 Bucket"
   default     = "marshalldaniel-pathways-s3-weather-app"
 }
-
-variable "tags" {
-  type        = map(string)
-  description = "Use tags to identify project resources"
-  default     = {}
-}
-
-variable "vpc_cidr" {
-  type        = string
-  description = "CIDR block to use for the VPC"
-  default     = "10.0.5.0/24"
-}
-
-variable "subnet_private1_cidr" {
-  type        = string
-  description = "CIDR block to use for private subnet 1"
-  default     = "10.0.5.0/26"
-}
-
-variable "subnet_private2_cidr" {
-  type        = string
-  description = "CIDR block to use for private subnet 2"
-  default     = "10.0.5.64/26	"
-}
-
-variable "subnet_private3_cidr" {
-  type        = string
-  description = "CIDR block to use for private subnet 3"
-  default     = "10.0.5.128/26"
-}
-
-variable "subnet_public1_cidr" {
-  type        = string
-  description = "CIDR block to use for public subnet 1"
-  default     = "10.0.5.192/28"
-}
-
-variable "subnet_public2_cidr" {
-  type        = string
-  description = "CIDR block to use for public subnet 2"
-  default     = "10.0.5.208/28"
-}
-
-variable "subnet_public3_cidr" {
-  type        = string
-  description = "CIDR block to use for public subnet 3"
-  default     = "10.0.5.224/28"
-}
-
-# variable "subnet_public1_az" {
-#   type        = string
-#   description = "Availability zone to use for public subnet 1"
-#   default     = ""
-# }
-
-# variable "subnet_public2_az" {
-#   type        = string
-#   description = "Availability zone to use for public subnet 2"
-#   default     = ""
-# }
-
-# variable "subnet_public3_az" {
-#   type        = string
-#   description = "Availability zone to use for public subnet 3"
-#   default     = ""
-# }
-
-# variable "subnet_private1_az" {
-#   type        = string
-#   description = "Availability zone to use for private subnet 1"
-#   default     = ""
-# }
-
-# variable "subnet_private2_az" {
-#   type        = string
-#   description = "Availability zone to use for private subnet 2"
-#   default     = ""
-# }
-
-# variable "subnet_private3_az" {
-#   type        = string
-#   description = "Availability zone to use for private subnet 3"
-#   default     = "${local.region}c"
-# }
