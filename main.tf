@@ -24,10 +24,43 @@ module "s3_bucket" {
 }
 
 ################################################################################
-### VPC gateway endpoint
+### VPC s3 gateway endpoint
 ################################################################################
 
 resource "aws_vpc_endpoint" "s3" {
   vpc_id       = module.terraform-vpc.vpc_id
   service_name = var.set_s3_gateway_endpoint
 }
+
+################################################################################
+### Additional public subnet route tables - 1 per AZ
+################################################################################
+
+# resource "aws_route_table" "public1" {
+#   vpc_id = aws_vpc.this.id
+
+#   tags = {
+#       Name = "marshalldaniel-rt-public1"
+#   }
+# }
+
+# resource "aws_route" "public_internet_gateway" {
+#   route_table_id         = aws_route_table.public1.id
+#   destination_cidr_block = "0.0.0.0/0"
+#   gateway_id             = aws_internet_gateway.this.id
+
+#   timeouts {
+#     create = "5m"
+#   }
+# }
+
+
+# resource "aws_route_table_association" "public2" {
+#   subnet_id = aws_subnet.public2.id
+#   route_table_id = aws_route_table.public1.id
+# }
+
+# resource "aws_route_table_association" "public3" {
+#   subnet_id = aws_subnet.public3.id
+#   route_table_id = aws_route_table.public1.id
+# }
