@@ -28,6 +28,6 @@ module "s3_bucket" {
 ################################################################################
 
 resource "aws_vpc_endpoint" "s3" {
-  vpc_id       = var.vpc_id
+  vpc_id       = module.terraform-vpc.vpc_id
   service_name = var.set_s3_gateway_endpoint
 }
