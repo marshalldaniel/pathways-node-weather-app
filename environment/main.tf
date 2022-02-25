@@ -33,9 +33,10 @@ module "s3_bucket" {
 # }
 
 locals {
-  a = [ for v in aws_route_table.public_rts : v.id ]
-  endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ a ])
-#  endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ public_route_table_ids ])
+  # a = [ for v in aws_route_table.public_rts : v.id ]
+  # endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ a ])
+  # endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ public_route_table_ids ])
+  endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ for v in aws_route_table.public_rts : v.id ])
 }
 
 data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
@@ -47,8 +48,8 @@ data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
       "s3:PutObject"
     ]
     resources = [
-      "${var.aws_s3_bucket.this.arn}",
-      "${var.aws_s3_bucket.this.arn}/*"
+      "${module.s3_bucket.s3_bucket_name_arn}",
+      "${module.s3_bucket.s3_bucket_name_arn}/*"
     ]
   }
 }
@@ -62,7 +63,7 @@ resource "aws_iam_policy" "s3_gateway_endpoint_policy" {
 
 resource "aws_vpc_endpoint" "s3" {
   service_name = var.set_s3_gateway_endpoint
-  vpc_id       = var.vpc_id
+  vpc_id       = module.terraform-vpc.vpc_id
   policy       = aws_iam_policy.s3_gateway_endpoint_policy.id
   vpc_endpoint_type = "Gateway"
   route_table_ids = [
