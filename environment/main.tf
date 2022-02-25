@@ -18,9 +18,9 @@ module "terraform-vpc" {
 ### Reference the s3_bucket module
 ################################################################################
 module "s3_bucket" {
-  source                  = "./modules/s3"
-  bucket                  = var.bucket
-  tags                    = var.set_custom_tags
+  source = "./modules/s3"
+  bucket = var.bucket
+  tags   = var.set_custom_tags
 }
 
 ################################################################################
@@ -36,7 +36,7 @@ locals {
   # a = [ for v in aws_route_table.public_rts : v.id ]
   # endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ a ])
   # endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ public_route_table_ids ])
-  endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ for v in aws_route_table.public_rts : v.id ])
+  endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [for v in aws_route_table.public_rts : v.id])
 }
 
 data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
@@ -62,15 +62,15 @@ resource "aws_iam_policy" "s3_gateway_endpoint_policy" {
 }
 
 resource "aws_vpc_endpoint" "s3" {
-  service_name = var.set_s3_gateway_endpoint
-  vpc_id       = module.terraform-vpc.vpc_id
-  policy       = aws_iam_policy.s3_gateway_endpoint_policy.id
+  service_name      = var.set_s3_gateway_endpoint
+  vpc_id            = module.terraform-vpc.vpc_id
+  policy            = aws_iam_policy.s3_gateway_endpoint_policy.id
   vpc_endpoint_type = "Gateway"
   route_table_ids = [
     local.endpoint_rt_ids
   ]
 
-  tags         = var.set_custom_tags
+  tags = var.set_custom_tags
 }
 
 
@@ -135,7 +135,7 @@ resource "aws_route_table" "public_rts" {
 # }
 
 locals {
-  public_route_table_ids = [ for v in aws_route_table.public_rts : v.id ]
+  public_route_table_ids = [for v in aws_route_table.public_rts : v.id]
 }
 # Tuple of RT 1, 2, 3
 
@@ -151,7 +151,7 @@ locals {
 resource "aws_route_table_association" "public_rt_associations" {
   for_each = local.public_route_table_ids
 
-  subnet_id = module.terraform-vpc.public_subnets.id[each.value]
+  subnet_id      = module.terraform-vpc.public_subnets.id[each.value]
   route_table_id = local.public_route_table_ids[each.value]
 }
 
