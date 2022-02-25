@@ -1,15 +1,15 @@
-name: Destroy
+name: Destroy-environment
 on:
   push:
     branches:
       - destroy
     paths:
-      - 'docker-compose.yml'
-      - 'Makefile'
-      - '.github/workflows/**'
-      - '*dockerfile'
-      - 'modules/**'
-      - '**.tf'
+      - 'environment/docker-compose.yml'
+      - 'environment/Makefile'
+      - 'environment/.github/workflows/**'
+      - 'environment/*dockerfile'
+      - 'environment/modules/**'
+      - 'environment/**.tf'
 
 jobs:
   terraform_destroy_plan:
