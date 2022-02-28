@@ -10,6 +10,7 @@ on:
       - 'containers/*dockerfile'
       - 'containers/modules/**'
       - 'containers/**.tf'
+      - 'containers/file_to_test_launch.txt'
 jobs:
   terraform_plan:
     runs-on: ubuntu-latest

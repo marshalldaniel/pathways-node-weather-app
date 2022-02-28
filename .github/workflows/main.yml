@@ -10,6 +10,7 @@ on:
       - 'environment/*dockerfile'
       - 'environment/modules/**'
       - 'environment/**.tf'
+      - 'environment/file_to_test_launch.txt'
 jobs:
   terraform_plan:
     defaults:
