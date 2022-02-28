@@ -21,6 +21,7 @@ module "ecr" {
 ################################################################################
 
 module "terraform_ecs" {
+# Has deprecated resource references - possibly look at manual creation for now.
   source  = "terraform-aws-modules/ecs/aws"
   version = "3.4.1"
   # insert the 1 required variable here
