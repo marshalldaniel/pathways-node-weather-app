@@ -123,7 +123,7 @@ locals {
 }
 
 resource "aws_route_table" "public_rts" {
-  for_each = public_subnet_out.
+  for_each = public_subnet_out.name
 
   vpc_id = module.terraform-vpc.vpc_id
   route {
