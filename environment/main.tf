@@ -64,7 +64,7 @@ resource "aws_vpc_endpoint" "s3" {
   vpc_endpoint_type = "Gateway"
   route_table_ids = [
     module.terraform_vpc.private_route_table_ids,
-    public_rt_ids,
+    aws_route_table.public_rts.id,
   ]
 
   tags = var.set_custom_tags
@@ -91,9 +91,9 @@ resource "aws_route_table" "public_rts" {
   ]
 }
 
-output "public_rt_ids" {
-  value = aws_route_table.public_rts.id
-}
+# output "public_rt_ids" {
+#   value = aws_route_table.public_rts.id
+# }
 
 locals {
   public_route_table_ids = [for v in aws_route_table.public_rts : v.id]
