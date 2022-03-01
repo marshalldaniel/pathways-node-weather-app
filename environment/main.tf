@@ -42,30 +42,25 @@ data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
   }
 }
 
-resource "aws_iam_policy" "s3_gateway_endpoint_policy" {
-  name        = "marshalldaniel_s3_gateway_endpoint_policy"
-  path        = "/"
-  description = "This policy restricts access to a specific S3 bucket on the S3 gateway endpoint"
-  policy      = data.aws_iam_policy_document.set_gateway_endpoint_policy_document.json
-}
+# resource "aws_iam_policy" "s3_gateway_endpoint_policy" {
+#   name        = "marshalldaniel_s3_gateway_endpoint_policy"
+#   path        = "/"
+#   description = "This policy restricts access to a specific S3 bucket on the S3 gateway endpoint"
+#   policy      = data.aws_iam_policy_document.set_gateway_endpoint_policy_document.json
+# }
 
 resource "aws_vpc_endpoint" "s3" {
   service_name      = var.set_s3_gateway_endpoint
   vpc_id            = module.terraform_vpc.vpc_id
-  policy            = data.aws_iam_policy_document.set_gateway_endpoint_policy_document.json
+  # policy            = data.aws_iam_policy_document.set_gateway_endpoint_policy_document.json
   vpc_endpoint_type = "Gateway"
-  # route_table_ids = [
-    # "asdf1", "asdf2", "asdf3"
-    # "${join(",", "module.terraform_vpc.private_route_table_ids[*]")}"
-    # priv_rt_id1, priv_rt_id2, priv_rt_id3
-    # "${aws_route_table.public_rts[*].id}"
-  # ]
 
   tags = var.set_custom_tags
-  
-  # depends_on = [
-  #   aws_route_table.public_rts,
-  # ]
+}
+
+resource "aws_vpc_endpoint_policy" "s3_policy" {
+  vpc_endpoint_id = aws_vpc_endpoint.s3.id
+  policy = data.aws_iam_policy_document.set_gateway_endpoint_policy_document.json
 }
 
 resource "aws_vpc_endpoint_route_table_association" "private_associations" {
