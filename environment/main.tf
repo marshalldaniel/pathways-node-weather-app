@@ -35,6 +35,9 @@ data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
       "s3:GetObject",
       "s3:PutObject"
     ]
+    principal = [
+      "*"
+    ]
     resources = [
       "${module.s3_bucket.s3_bucket_name_arn}",
       "${module.s3_bucket.s3_bucket_name_arn}/*"
