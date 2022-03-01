@@ -123,13 +123,16 @@ locals {
 }
 
 resource "aws_route_table" "public_rts" {
-  for_each = local.public_subnet_out.name
+  count = length(local.public_subnet_out)
 
   vpc_id = module.terraform-vpc.vpc_id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = module.terraform-vpc.igw_id
   }
+  depends_on = [
+    module.terraform-vpc.public_subnets,
+  ]
 }
 
 # Creates one RT for each public subnet
