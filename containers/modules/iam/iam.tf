@@ -7,55 +7,66 @@ variable "set_username_prefix" {}
 ### IAM
 ################################################################################
 
+data "aws_iam_policy_document" "set_ecs_iam_document" {
+  statement {
+    actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchGetImage",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:GetAuthorizationToken"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "set_ecs_trust_document" {
+  statement {
+    actions = [
+      "sts:AssumeRole"
+    ]
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
+
 # Create iam policy for ecs
-resource "aws_iam_policy" "ecs_policy" {
+resource "aws_iam_policy" "set_ecs_iam_policy" {
   name        = "${var.set_username_prefix}EcsEcrAccess"
   path        = "/"
   description = "ECS exection policy (allows ECS to pull images from ECR)"
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:BatchGetImage",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:GetAuthorizationToken"
-        ],
-        "Resource" : "*"
-      }
-    ]
-  })
+  policy = data.aws_iam_policy_document.set_ecs_iam_document.json
 }
 
 # Create iam role for ecs
-resource "aws_iam_role" "ecs_role" {
+resource "aws_iam_role" "set_ecs_iam_role" {
   name = "${var.set_username_prefix}EcsExecutionRole"
 
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Sid" : "",
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : [
-            "ecs-tasks.amazonaws.com"
-          ]
-        },
-        "Action" : "sts:AssumeRole"
-      }
-    ]
-  })
+  assume_role_policy = data.aws_iam_policy_document.set_ecs_trust_document.json
+  #   assume_role_policy = jsonencode({
+  #   "Version" : "2012-10-17",
+  #   "Statement" : [
+  #     {
+  #       "Sid" : "",
+  #       "Effect" : "Allow",
+  #       "Principal" : {
+  #         "Service" : [
+  #           "ecs-tasks.amazonaws.com"
+  #         ]
+  #       },
+  #       "Action" : "sts:AssumeRole"
+  #     }
+  #   ]
+  # })
 }
 
 # Attach policy to role
 resource "aws_iam_role_policy_attachment" "ecs_attach_policy" {
-  role       = aws_iam_role.ecs_role.name
-  policy_arn = aws_iam_policy.ecs_policy.arn
+  role       = aws_iam_role.set_ecs_iam_role.name
+  policy_arn = aws_iam_policy.set_ecs_iam_policy.arn
 }
 
 ################################################################################
