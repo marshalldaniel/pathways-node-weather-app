@@ -118,8 +118,12 @@ resource "aws_vpc_endpoint" "s3" {
 #   subnet_ids = [for subnet in aws_subnet.subnets : subnet.id]
 # }
 
+locals {
+  public_subnet_out = module.terraform-vpc.public_subnets
+}
+
 resource "aws_route_table" "public_rts" {
-  for_each = module.terraform-vpc.public_subnets_cidr_blocks
+  for_each = public_subnet_out.
 
   vpc_id = module.terraform-vpc.vpc_id
   route {
