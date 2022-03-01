@@ -119,7 +119,7 @@ resource "aws_vpc_endpoint" "s3" {
 # }
 
 resource "aws_route_table" "public_rts" {
-  for_each = module.terraform-vpc.public_subnets
+  for_each = module.terraform-vpc.public_subnets_cidr_blocks
 
   vpc_id = module.terraform-vpc.vpc_id
   route {
@@ -127,6 +127,7 @@ resource "aws_route_table" "public_rts" {
     gateway_id = module.terraform-vpc.igw_id
   }
 }
+
 # Creates one RT for each public subnet
 
 # output "public_route_table_out" {
