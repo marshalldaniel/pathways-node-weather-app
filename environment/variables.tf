@@ -39,7 +39,7 @@ variable "create_public_subnets" {
 variable "get_azs" {
   type        = list(string)
   description = "A list of availability zones names or ids in the region"
-  default     = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+  default     = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
 }
 
 variable "create_igw" {
@@ -63,7 +63,7 @@ variable "create_nat_gateway_per_az" {
 variable "set_s3_gateway_endpoint" {
   type        = string
   description = "Specifies the service name for the gateway endpoint"
-  default     = "com.amazonaws.ap-southeast-1.s3"
+  default     = "com.amazonaws.eu-west-1.s3"
 }
 
 ################################################################################
