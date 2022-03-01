@@ -27,14 +27,6 @@ module "s3_bucket" {
 ### VPC s3 gateway endpoint
 ################################################################################
 
-# locals {
-#   endpoint_rt_ids = concat(["${module.terraform_vpc.private_route_table_ids}"], [for v in aws_route_table.public_rts : v.id])
-  
-#   depends_on = [
-#     aws_route_table.public_rts,
-#   ]
-# }
-
 data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
   statement {
     sid = "AccessToSpecificBucket"
@@ -62,21 +54,38 @@ resource "aws_vpc_endpoint" "s3" {
   vpc_id            = module.terraform_vpc.vpc_id
   policy            = aws_iam_policy.s3_gateway_endpoint_policy.id
   vpc_endpoint_type = "Gateway"
-  route_table_ids = [
-    module.terraform_vpc.private_route_table_ids,
-    aws_route_table.public_rts.id,
-  ]
+  # route_table_ids = [
+    # "asdf1", "asdf2", "asdf3"
+    # "${join(",", "module.terraform_vpc.private_route_table_ids[*]")}"
+    # priv_rt_id1, priv_rt_id2, priv_rt_id3
+    # "${aws_route_table.public_rts[*].id}"
+  # ]
 
   tags = var.set_custom_tags
   
-  depends_on = [
-    aws_route_table.public_rts,
-  ]
+  # depends_on = [
+  #   aws_route_table.public_rts,
+  # ]
 }
 
-################################################################################
-### Additional public subnet route tables - 1 per AZ
-################################################################################
+resource "aws_vpc_endpoint_route_table_association" "private_associations" {
+  count = length(module.terraform_vpc.private_route_table_ids)
+
+  route_table_id  = module.terraform_vpc.private_route_table_ids[count.index]
+  vpc_endpoint_id = aws_vpc_endpoint.s3.id
+}
+
+resource "aws_vpc_endpoint_route_table_association" "public_associations" {
+  count = length(aws_route_table.public_rts)
+
+  route_table_id  = aws_route_table.public_rts[count.index].id
+  vpc_endpoint_id = aws_vpc_endpoint.s3.id
+}
+
+
+# ################################################################################
+# ### Additional public subnet route tables - 1 per AZ
+# ################################################################################
 
 resource "aws_route_table" "public_rts" {
   count = length(module.terraform_vpc.public_subnets)
@@ -86,22 +95,14 @@ resource "aws_route_table" "public_rts" {
     cidr_block = "0.0.0.0/0"
     gateway_id = module.terraform_vpc.igw_id
   }
-  depends_on = [
-    module.terraform_vpc.public_subnets,
-  ]
-}
-
-# output "public_rt_ids" {
-#   value = aws_route_table.public_rts.id
-# }
-
-locals {
-  public_route_table_ids = [for v in aws_route_table.public_rts : v.id]
+  # depends_on = [
+  #   module.terraform_vpc.public_subnets,
+  # ]
 }
 
 resource "aws_route_table_association" "public_rt_associations" {
-  count = length(local.public_route_table_ids)
+  count = length(aws_route_table.public_rts)
 
-  subnet_id      = module.terraform_vpc.public_subnets.id[each.value]
-  route_table_id = local.public_route_table_ids[each.value]
+  subnet_id      = module.terraform_vpc.public_subnets[count.index]
+  route_table_id = aws_route_table.public_rts[count.index].id
 }
