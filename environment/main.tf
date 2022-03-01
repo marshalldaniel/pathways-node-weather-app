@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
 }
 
 resource "aws_iam_policy" "s3_gateway_endpoint_policy" {
-  name        = "s3_gateway_endpoint_policy"
+  name        = "marshalldaniel_s3_gateway_endpoint_policy"
   path        = "/"
   description = "This policy restricts access to a specific S3 bucket on the S3 gateway endpoint"
   policy      = data.aws_iam_policy_document.set_gateway_endpoint_policy_document.json
