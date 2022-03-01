@@ -36,10 +36,10 @@ locals {
   # a = [ for v in aws_route_table.public_rts : v.id ]
   # endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ a ])
   # endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ public_route_table_ids ])
-  endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [for v in aws_route_table.public_rts : v.id])
+  endpoint_rt_ids = concat(("${module.terraform-vpc.private_route_table_ids}"), (for v in aws_route_table.public_rts : v.id))
   
   depends_on = [
-  module.terraform-vpc.vpc_id,
+    aws_route_table.public_rts,
   ]
 }
 
@@ -75,7 +75,10 @@ resource "aws_vpc_endpoint" "s3" {
   ]
 
   tags = var.set_custom_tags
-
+  
+  depends_on = [
+    aws_route_table.public_rts,
+  ]
 }
 
 
@@ -162,7 +165,7 @@ locals {
 # }
 
 resource "aws_route_table_association" "public_rt_associations" {
-  for_each = local.public_route_table_ids
+  count = length(local.public_route_table_ids)
 
   subnet_id      = module.terraform-vpc.public_subnets.id[each.value]
   route_table_id = local.public_route_table_ids[each.value]
