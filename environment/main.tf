@@ -37,6 +37,10 @@ locals {
   # endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ a ])
   # endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [ public_route_table_ids ])
   endpoint_rt_ids = concat(["${module.terraform-vpc.private_route_table_ids}"], [for v in aws_route_table.public_rts : v.id])
+  
+  depends_on = [
+  module.terraform-vpc.vpc_id,
+  ]
 }
 
 data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
@@ -71,6 +75,7 @@ resource "aws_vpc_endpoint" "s3" {
   ]
 
   tags = var.set_custom_tags
+
 }
 
 
