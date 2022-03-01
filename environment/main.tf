@@ -52,7 +52,7 @@ resource "aws_iam_policy" "s3_gateway_endpoint_policy" {
 resource "aws_vpc_endpoint" "s3" {
   service_name      = var.set_s3_gateway_endpoint
   vpc_id            = module.terraform_vpc.vpc_id
-  policy            = aws_iam_policy.s3_gateway_endpoint_policy.json
+  policy            = aws_iam_policy.s3_gateway_endpoint_policy.policy
   vpc_endpoint_type = "Gateway"
   # route_table_ids = [
     # "asdf1", "asdf2", "asdf3"
