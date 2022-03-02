@@ -76,14 +76,15 @@ resource "aws_vpc_endpoint_route_table_association" "public_associations" {
 ################################################################################
 
 # arn:partition:service:region:account-id:resource-id
-# locals {
+locals {
 #   vpc_arn_list = split(":","${module.terraform_vpc.vpc_arn}")
-# }
+  vpc_region = element([split(":","${module.terraform_vpc.vpc_arn}")], 3)
+}
 
 resource "aws_ssm_parameter" "region" {
   name  = "/${var.set_username_prefix}/${var.set_project_path}/region"
   type  = "String"
-  value = element([split(":","${module.terraform_vpc.vpc_arn}")], 3)
+  value = local.vpc_region
 }
 
 resource "aws_ssm_parameter" "vpc_id_out" {
