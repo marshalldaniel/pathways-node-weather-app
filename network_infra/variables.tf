@@ -1,3 +1,5 @@
+### Network infra vars
+
 ################################################################################
 ### Tag variables
 ################################################################################
@@ -82,4 +84,20 @@ variable "bucket" {
   type        = string
   description = "Specifies the name of an S3 Bucket"
   default     = "marshalldaniel-pathways-s3-weather-app"
+}
+
+################################################################################
+### Variables to export to SSM parameters
+################################################################################
+
+resource "aws_ssm_parameter" "set_username_prefix" {
+  name  = "/${var.set_username_prefix}/${var.set_project_path}/variables/set_username_prefix"
+  type  = "String"
+  value = var.set_username_prefix
+}
+
+resource "aws_ssm_parameter" "set_project_path" {
+  name  = "/${var.set_username_prefix}/${var.set_project_path}/variables/set_project_path"
+  type  = "String"
+  value = var.set_project_path
 }
