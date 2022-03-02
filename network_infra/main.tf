@@ -1,6 +1,7 @@
 ################################################################################
 ### Reference the terraform_vpc module
 ################################################################################
+
 module "terraform_vpc" {
   source                 = "terraform-aws-modules/vpc/aws"
   name                   = var.set_username_prefix
@@ -17,6 +18,7 @@ module "terraform_vpc" {
 ################################################################################
 ### Reference the s3_bucket module
 ################################################################################
+
 module "s3_bucket" {
   source = "./modules/s3"
   bucket = var.bucket
@@ -46,13 +48,6 @@ data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
   }
 }
 
-# resource "aws_iam_policy" "s3_gateway_endpoint_policy" {
-#   name        = "marshalldaniel_s3_gateway_endpoint_policy"
-#   path        = "/"
-#   description = "This policy restricts access to a specific S3 bucket on the S3 gateway endpoint"
-#   policy      = data.aws_iam_policy_document.set_gateway_endpoint_policy_document.json
-# }
-
 resource "aws_vpc_endpoint" "s3" {
   service_name      = var.set_s3_gateway_endpoint
   vpc_id            = module.terraform_vpc.vpc_id
@@ -62,11 +57,6 @@ resource "aws_vpc_endpoint" "s3" {
   tags = var.set_custom_tags
 }
 
-# resource "aws_vpc_endpoint_policy" "s3_policy" {
-#   vpc_endpoint_id = aws_vpc_endpoint.s3.id
-#   policy = data.aws_iam_policy_document.set_gateway_endpoint_policy_document.json
-# }
-
 resource "aws_vpc_endpoint_route_table_association" "private_associations" {
   count = length(module.terraform_vpc.private_route_table_ids)
 
@@ -75,56 +65,29 @@ resource "aws_vpc_endpoint_route_table_association" "private_associations" {
 }
 
 resource "aws_vpc_endpoint_route_table_association" "public_associations" {
-  # count = length(aws_route_table.public_rts)
-
-  # route_table_id  = aws_route_table.public_rts[count.index].id
   count = length(module.terraform_vpc.public_route_table_ids)
 
-  route_table_id = module.terraform_vpc.public_route_table_ids[count.index]
+  route_table_id  = module.terraform_vpc.public_route_table_ids[count.index]
   vpc_endpoint_id = aws_vpc_endpoint.s3.id
 }
-
-
-# # ################################################################################
-# # ### Additional public subnet route tables - 1 per AZ
-# # ################################################################################
-
-# resource "aws_route_table" "public_rts" {
-#   count = length(module.terraform_vpc.public_subnets)
-
-#   vpc_id = module.terraform_vpc.vpc_id
-#   route {
-#     cidr_block = "0.0.0.0/0"
-#     gateway_id = module.terraform_vpc.igw_id
-#   }
-#   # depends_on = [
-#   #   module.terraform_vpc.public_subnets,
-#   # ]
-# }
-
-# resource "aws_route_table_association" "public_rt_associations" {
-#   count = length(aws_route_table.public_rts)
-
-#   subnet_id      = module.terraform_vpc.public_subnets[count.index]
-#   route_table_id = aws_route_table.public_rts[count.index].id
-# }
-
 
 ################################################################################
 ### Outputs to SSM Parameter Store
 ################################################################################
 
-# variable "name_counts" {
-#   type    = list
-#   default = ["1","2","3"]
+# arn:partition:service:region:account-id:resource-id
+# locals {
+#   vpc_arn_list = split(":","${module.terraform_vpc.vpc_arn}")
 # }
 
-# locals {
-#   subnet_public_parameters = 
-# }
+resource "aws_ssm_parameter" "region" {
+  name  = "/${var.set_username_prefix}/${var.set_project_path}/region"
+  type  = "String"
+  value = element([split(":","${module.terraform_vpc.vpc_arn}")], 3)
+}
 
 resource "aws_ssm_parameter" "vpc_id_out" {
-  name  = "/marshalldaniel/pathways/weather-app/vpc/id"
+  name  = "/${var.set_username_prefix}/${var.set_project_path}/vpc/id"
   type  = "String"
   value = module.terraform_vpc.vpc_id
 }
@@ -132,16 +95,15 @@ resource "aws_ssm_parameter" "vpc_id_out" {
 resource "aws_ssm_parameter" "subnet_public_ids" {
   count = length(module.terraform_vpc.public_subnets)
 
-  name  = "/marshalldaniel/pathways/weather-app/subnet/public/${count.index}/id"
+  name  = "/${var.set_username_prefix}/${var.set_project_path}/subnet/public/${count.index}/id"
   type  = "String"
   value = module.terraform_vpc.public_subnets[count.index]
 }
 
 resource "aws_ssm_parameter" "subnet_public_arns" {
-  # testing if using the same count operation returns the equivalent arn of the subnet id
   count = length(module.terraform_vpc.public_subnets)
 
-  name  = "/marshalldaniel/pathways/weather-app/subnet/public/${count.index}/arn"
+  name  = "/${var.set_username_prefix}/${var.set_project_path}/subnet/public/${count.index}/arn"
   type  = "String"
   value = module.terraform_vpc.public_subnet_arns[count.index]
 }
@@ -149,16 +111,15 @@ resource "aws_ssm_parameter" "subnet_public_arns" {
 resource "aws_ssm_parameter" "subnet_private_ids" {
   count = length(module.terraform_vpc.private_subnets)
 
-  name  = "/marshalldaniel/pathways/weather-app/subnet/private/${count.index}/id"
+  name  = "/${var.set_username_prefix}/${var.set_project_path}/subnet/private/${count.index}/id"
   type  = "String"
   value = module.terraform_vpc.private_subnets[count.index]
 }
 
 resource "aws_ssm_parameter" "subnet_private_arns" {
-  # testing if using the same count operation returns the equivalent arn of the subnet id
   count = length(module.terraform_vpc.private_subnets)
 
-  name  = "/marshalldaniel/pathways/weather-app/subnet/private/${count.index}/arn"
+  name  = "/${var.set_username_prefix}/${var.set_project_path}/subnet/private/${count.index}/arn"
   type  = "String"
   value = module.terraform_vpc.private_subnet_arns[count.index]
 }

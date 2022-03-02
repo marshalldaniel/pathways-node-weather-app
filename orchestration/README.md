@@ -1,0 +1,2 @@
+### Title
+This folder is intended to host files which are duplicated elsewhere, e.g. dockerfile, docker-compose.yml. Possibly also the Makefile, depending on how paths are passed to the file for execution.

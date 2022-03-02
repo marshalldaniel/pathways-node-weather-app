@@ -9,6 +9,3 @@ services:
         target: /opt/app
     working_dir: /opt/app
     env_file: .env
-
-
-    

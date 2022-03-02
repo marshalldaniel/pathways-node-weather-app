@@ -1,21 +1,22 @@
-name: Deploy-containers
+name: create_container_infra
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
     paths:
-      - 'containers/docker-compose.yml'
-      - 'containers/Makefile'
-      - 'containers/.github/workflows/**'
-      - 'containers/*dockerfile'
-      - 'containers/modules/**'
-      - 'containers/**.tf'
-      - 'containers/file_to_test_launch.txt'
+      - 'container_infra/docker-compose.yml'
+      - 'container_infra/Makefile'
+      - 'container_infra/.github/workflows/**'
+      - 'container_infra/*dockerfile'
+      - 'container_infra/modules/**'
+      - 'container_infra/**.tf'
+      - 'container_infra/file_to_test_launch.txt'
 jobs:
   terraform_plan:
     defaults:
       run:
-        working-directory: ./containers
+        working-directory: ./container_infra
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

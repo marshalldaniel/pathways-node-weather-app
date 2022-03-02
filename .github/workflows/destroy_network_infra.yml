@@ -1,21 +1,22 @@
-name: Destroy-environment
+name: destroy_network_infra
 on:
+  workflow_dispatch:
   push:
     branches:
       - destroy
     paths:
-      - 'environment/docker-compose.yml'
-      - 'environment/Makefile'
-      - 'environment/.github/workflows/**'
-      - 'environment/*dockerfile'
-      - 'environment/modules/**'
-      - 'environment/**.tf'
+      - 'network_infra/docker-compose.yml'
+      - 'network_infra/Makefile'
+      - 'network_infra/.github/workflows/**'
+      - 'network_infra/*dockerfile'
+      - 'network_infra/modules/**'
+      - 'network_infra/**.tf'
 
 jobs:
   terraform_destroy_plan:
     defaults:
       run:
-        working-directory: ./environment
+        working-directory: ./network_infra
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -29,7 +30,7 @@ jobs:
   terraform_destroy_apply:
     defaults:
       run:
-        working-directory: ./environment
+        working-directory: ./network_infra
     environment:
       name: approval
     needs: terraform_destroy_plan

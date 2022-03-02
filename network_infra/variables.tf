@@ -1,6 +1,7 @@
 ################################################################################
 ### Tag variables
 ################################################################################
+
 variable "set_username_prefix" {
   type        = string
   description = "Name to be used on all the resources as identifier"
@@ -15,9 +16,16 @@ variable "set_custom_tags" {
   }
 }
 
+variable "set_project_path" {
+  type        = string
+  description = "Project name to be used in path of SSM parameters to be exported"
+  default     = "pathways/weather-app"
+}
+
 ################################################################################
 ### terraform_vpc module variables
 ################################################################################
+
 variable "set_vpc_cidr_range" {
   type        = string
   description = "The CIDR block for the VPC. Default value is a valid CIDR, but not acceptable by AWS and should be overridden"

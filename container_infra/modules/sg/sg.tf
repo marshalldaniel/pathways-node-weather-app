@@ -10,15 +10,19 @@ variable "set_username_prefix" {}
 ### Security Groups
 ################################################################################
 
-#hard code vpc id for testing
-locals {
-    vpc_id = "vpc-02256d210cdecca76"
+data "aws_ssm_parameter" "vpc_id" {
+  name = "/${var.set_username_prefix}/pathways/weather-app/vpc/id"
 }
+
+#hard code vpc id for testing
+# locals {
+#     vpc_id = "vpc-02256d210cdecca76"
+# }
 
 resource "aws_security_group" "set_alb_sg" {
   name = "weather-app-alb-sg"
   description = "weather-app-alb-sg"
-  vpc_id = local.vpc_id
+  vpc_id = data.aws_ssm_parameter.vpc_id.value
 
   ingress {
     description = "Internet Web Traffic"
@@ -32,7 +36,7 @@ resource "aws_security_group" "set_alb_sg" {
 resource "aws_security_group" "set_ecs_sg" {
   name = "weather-app-ecs-sg"
   description = "weather-app-ecs-sg"
-  vpc_id = local.vpc_id
+  vpc_id = data.aws_ssm_parameter.vpc_id.value
 
   ingress {
     description = "ALB to ECS traffic"
