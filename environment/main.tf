@@ -108,3 +108,57 @@ resource "aws_vpc_endpoint_route_table_association" "public_associations" {
 #   subnet_id      = module.terraform_vpc.public_subnets[count.index]
 #   route_table_id = aws_route_table.public_rts[count.index].id
 # }
+
+
+################################################################################
+### Outputs to SSM Parameter Store
+################################################################################
+
+# variable "name_counts" {
+#   type    = list
+#   default = ["1","2","3"]
+# }
+
+# locals {
+#   subnet_public_parameters = 
+# }
+
+resource "aws_ssm_parameter" "vpc_id_out" {
+  name  = "/marshalldaniel/pathways/weather-app/vpc/id"
+  type  = "String"
+  value = module.terraform_vpc.vpc_id
+}
+
+resource "aws_ssm_parameter" "subnet_public_ids" {
+  count = length(module.terraform_vpc.public_subnets)
+
+  name  = "/marshalldaniel/pathways/weather-app/subnet/public/${count.index}/id"
+  type  = "String"
+  value = module.terraform_vpc.public_subnets[count.index]
+}
+
+resource "aws_ssm_parameter" "subnet_public_arns" {
+  # testing if using the same count operation returns the equivalent arn of the subnet id
+  count = length(module.terraform_vpc.public_subnets)
+
+  name  = "/marshalldaniel/pathways/weather-app/subnet/public/${count.index}/arn"
+  type  = "String"
+  value = module.terraform_vpc.public_subnet_arns[count.index]
+}
+
+resource "aws_ssm_parameter" "subnet_private_ids" {
+  count = length(module.terraform_vpc.private_subnets)
+
+  name  = "/marshalldaniel/pathways/weather-app/subnet/private/${count.index}/id"
+  type  = "String"
+  value = module.terraform_vpc.private_subnets[count.index]
+}
+
+resource "aws_ssm_parameter" "subnet_private_arns" {
+  # testing if using the same count operation returns the equivalent arn of the subnet id
+  count = length(module.terraform_vpc.private_subnets)
+
+  name  = "/marshalldaniel/pathways/weather-app/subnet/private/${count.index}/arn"
+  type  = "String"
+  value = module.terraform_vpc.private_subnet_arns[count.index]
+}

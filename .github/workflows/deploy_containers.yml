@@ -42,19 +42,20 @@ jobs:
     - name: Terraform_Apply
       run: make run_apply
 
-  docker_image_build:
-    defaults:
-      run:
-        working-directory: ./weather_app
-    runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_SESSION_TOKEN:  ${{ secrets.AWS_SESSION_TOKEN }} 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Terraform_Plan
-      run: |
-        docker tag {image-name}:1 {account-id}.dkr.ecr.{aws-region}.amazonaws.com/{repo-name}:1
-        aws ecr get-login-password --region {aws-region} | docker login --username AWS --password-stdin {account-id}.dkr.ecr.{aws-region}.amazonaws.com
-        docker push {account-id}.dkr.ecr.{aws-region}.amazonaws.com/{repo-name}:1
+  # docker_image_build:
+  #   defaults:
+  #     run:
+  #       working-directory: ./weather_app
+  #     needs: terraform_apply
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     AWS_SESSION_TOKEN:  ${{ secrets.AWS_SESSION_TOKEN }} 
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Terraform_Plan
+  #     run: |
+  #       docker tag {image-name}:1 {account-id}.dkr.ecr.{aws-region}.amazonaws.com/{repo-name}:1
+  #       aws ecr get-login-password --region {aws-region} | docker login --username AWS --password-stdin {account-id}.dkr.ecr.{aws-region}.amazonaws.com
+  #       docker push {account-id}.dkr.ecr.{aws-region}.amazonaws.com/{repo-name}:1
