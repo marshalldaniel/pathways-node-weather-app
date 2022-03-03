@@ -7,7 +7,7 @@ on:
     paths:
       - 'container_infra/docker-compose.yml'
       - 'container_infra/Makefile'
-      - 'container_infra/.github/workflows/**'
+      - '.github/workflows/create_container_infra.yml'
       - 'container_infra/*dockerfile'
       - 'container_infra/modules/**'
       - 'container_infra/**.tf'
@@ -28,6 +28,9 @@ jobs:
       run: make run_plan       
 
   terraform_apply:
+    defaults:
+      run:
+        working-directory: ./container_infra
     environment:
       name: approval
     needs: terraform_plan

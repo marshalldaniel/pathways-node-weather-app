@@ -7,7 +7,7 @@ on:
     paths:
       - 'network_infra/docker-compose.yml'
       - 'network_infra/Makefile'
-      - 'network_infra/.github/workflows/**'
+      - '.github/workflows/create_network_infra.yml'
       - 'network_infra/*dockerfile'
       - 'network_infra/modules/**'
       - 'network_infra/**.tf'
