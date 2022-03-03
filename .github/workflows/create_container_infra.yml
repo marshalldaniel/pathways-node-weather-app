@@ -5,37 +5,39 @@ on:
     branches:
       - master
     paths:
-      - 'container_infra/docker-compose.yml'
-      - 'container_infra/Makefile'
       - '.github/workflows/create_container_infra.yml'
-      - 'container_infra/*dockerfile'
       - 'container_infra/modules/**'
       - 'container_infra/**.tf'
-      - 'container_infra/file_to_test_launch.txt'
 jobs:
   terraform_plan:
     defaults:
       run:
-        working-directory: ./container_infra
+        working-directory: ./orchestration
     runs-on: ubuntu-latest
     env:
+      USERNAME: ${{ secrets.USERNAME }}
+      PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
+      STAGE_FILE: "docker-compose.network-infra.yml"
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_SESSION_TOKEN:  ${{ secrets.AWS_SESSION_TOKEN }} 
     steps:
     - uses: actions/checkout@v2
     - name: Terraform_Plan
-      run: make run_plan       
+      run: make run_plan
 
   terraform_apply:
     defaults:
       run:
-        working-directory: ./container_infra
+        working-directory: ./orchestration
     environment:
       name: approval
     needs: terraform_plan
     runs-on: ubuntu-latest
     env:
+      USERNAME: ${{ secrets.USERNAME }}
+      PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
+      STAGE_FILE: "docker-compose.container-infra.yml"
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_SESSION_TOKEN:  ${{ secrets.AWS_SESSION_TOKEN }} 
@@ -61,5 +63,9 @@ jobs:
       REPO_NAME: ${{ secrets.REPO_NAME }}
     steps:
     - uses: actions/checkout@v2
-    - name: Make_all
-      run: make all
+    - name: Log into ECR
+      run: make login_ecr
+    - name: Create Docker image
+      run: make build_docker
+    - name: Push Docker image
+      run: make push_image
