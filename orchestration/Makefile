@@ -24,7 +24,7 @@ run_destroy_apply: init destroy_apply
 .PHONY: version
 version:
 	$(COMPOSE_RUN_TERRAFORM) --version
-	
+
 .PHONY: init
 init:
 	$(COMPOSE_RUN_TERRAFORM) init
@@ -53,7 +53,7 @@ list_bucket:
 
 .PHONY: login_ecr
 login_ecr: 
-	$(COMPOSE_RUN_AWS) ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
+	aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
 
 .PHONY: build_docker
 build_docker: 
@@ -64,3 +64,7 @@ build_docker:
 push_image: 
 	cd ./weather_app
 	docker push $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(USERNAME)$(REPO_NAME):latest
+
+.PHONY: testing
+testing: 
+	$(COMPOSE_RUN_AWS) aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
