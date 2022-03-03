@@ -50,7 +50,7 @@ jobs:
     defaults:
       run:
         working-directory: ./weather_app
-      needs: terraform_apply
+    needs: terraform_apply
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
