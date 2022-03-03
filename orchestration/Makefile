@@ -1,4 +1,6 @@
 export STAGE_FILE
+export USERNAME
+export PROJECT_PATH
 COMPOSE_RUN_TERRAFORM = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm tf
 COMPOSE_RUN_BASH = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm --entrypoint bash tf
 COMPOSE_RUN_AWS = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm --entrypoint aws tf
@@ -21,25 +23,25 @@ version:
 	
 .PHONY: init
 init:
-	$(COMPOSE_RUN_TERRAFORM) init -input=false
-	-$(COMPOSE_RUN_TERRAFORM) validate
-	-$(COMPOSE_RUN_TERRAFORM) fmt
+	$(COMPOSE_RUN_TERRAFORM) init -input=false -var="set_username_prefix=$(USERNAME)" -var="set_project_path=$(PROJECT_PATH)"
+	-$(COMPOSE_RUN_TERRAFORM) validate -var="set_username_prefix=$(USERNAME)" -var="set_project_path=$(PROJECT_PATH)"
+	-$(COMPOSE_RUN_TERRAFORM) fmt -var="set_username_prefix=$(USERNAME)" -var="set_project_path=$(PROJECT_PATH)"
 
 .PHONY: plan
 plan:
-	$(COMPOSE_RUN_TERRAFORM) plan -out=tfplan -input=false
+	$(COMPOSE_RUN_TERRAFORM) plan -out=tfplan -input=false -var="set_username_prefix=$(USERNAME)" -var="set_project_path=$(PROJECT_PATH)"
 
 .PHONY: apply
 apply:
-	$(COMPOSE_RUN_TERRAFORM) apply "tfplan"
+	$(COMPOSE_RUN_TERRAFORM) apply "tfplan" -var="set_username_prefix=$(USERNAME)" -var="set_project_path=$(PROJECT_PATH)"
 
 .PHONY: destroy_plan
 destroy_plan:
-	$(COMPOSE_RUN_TERRAFORM) plan -destroy
+	$(COMPOSE_RUN_TERRAFORM) plan -destroy -var="set_username_prefix=$(USERNAME)" -var="set_project_path=$(PROJECT_PATH)"
 
 .PHONY: destroy_apply
 destroy_apply:
-	$(COMPOSE_RUN_TERRAFORM) destroy -auto-approve
+	$(COMPOSE_RUN_TERRAFORM) destroy -auto-approve -var="set_username_prefix=$(USERNAME)" -var="set_project_path=$(PROJECT_PATH)"
 
 .PHONY: list_bucket
 list_bucket: 

@@ -15,6 +15,8 @@ jobs:
         working-directory: ./orchestration
     runs-on: ubuntu-latest
     env:
+      USERNAME: ${{ secrets.USERNAME }}
+      PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
       STAGE_FILE: "docker-compose.network-infra.yml"
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -33,6 +35,8 @@ jobs:
     needs: terraform_plan
     runs-on: ubuntu-latest
     env:
+      USERNAME: ${{ secrets.USERNAME }}
+      PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
       STAGE_FILE: "docker-compose.network-infra.yml"
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
