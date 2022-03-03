@@ -33,7 +33,7 @@ plan:
 
 .PHONY: apply
 apply:
-	$(COMPOSE_RUN_TERRAFORM) apply "tfplan" -var="set_username_prefix=$(USERNAME)" -var="set_project_path=$(PROJECT_PATH)"
+	$(COMPOSE_RUN_TERRAFORM) apply "tfplan"
 
 .PHONY: destroy_plan
 destroy_plan:
