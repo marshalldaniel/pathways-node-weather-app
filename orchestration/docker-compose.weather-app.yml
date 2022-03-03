@@ -1,0 +1,7 @@
+version: '3'
+services:
+  tf:
+    volumes:
+      - type: bind
+        source: ../weather_app
+        target: /opt/app

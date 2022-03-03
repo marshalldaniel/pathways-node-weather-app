@@ -51,10 +51,11 @@ jobs:
   docker_image_build:
     defaults:
       run:
-        working-directory: ./weather_app
+        working-directory: ./orchestration
     needs: terraform_apply
     runs-on: ubuntu-latest
     env:
+      STAGE_FILE: "docker-compose.weather-app.yml"
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }} 

@@ -1,6 +1,10 @@
 export STAGE_FILE
 export USERNAME
 export PROJECT_PATH
+export ACCOUNT_ID
+export AWS_REGION 
+export REPO_NAME 
+DOCKERFILE = weather-app-dockerfile
 COMPOSE_RUN_TERRAFORM = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm tf
 COMPOSE_RUN_BASH = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm --entrypoint bash tf
 COMPOSE_RUN_AWS = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm --entrypoint aws tf
@@ -47,3 +51,16 @@ destroy_apply:
 list_bucket: 
 	$(COMPOSE_RUN_AWS) s3 ls
 
+.PHONY: login_ecr
+login_ecr: 
+    $(COMPOSE_RUN_AWS) ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
+
+.PHONY: build_docker
+build_docker: 
+	cd ./weather_app
+	docker build -t $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(REPO_NAME):latest -f $(DOCKERFILE) .
+
+.PHONY: push_image
+push_image: 
+	cd ./weather_app
+	docker push $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(REPO_NAME):latest
