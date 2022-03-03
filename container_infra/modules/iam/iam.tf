@@ -3,8 +3,6 @@
 ################################################################################
 variable "set_username_prefix" {}
 
-
-
 ################################################################################
 ### IAM
 ################################################################################
@@ -40,7 +38,7 @@ resource "aws_iam_policy" "set_ecs_iam_policy" {
   name        = "${var.set_username_prefix}EcsEcrAccess"
   path        = "/"
   description = "ECS exection policy (allows ECS to pull images from ECR)"
-  policy = data.aws_iam_policy_document.set_ecs_iam_document.json
+  policy      = data.aws_iam_policy_document.set_ecs_iam_document.json
 }
 
 # Create iam role for ecs
@@ -55,12 +53,3 @@ resource "aws_iam_role_policy_attachment" "ecs_attach_policy" {
   role       = aws_iam_role.set_ecs_iam_role.name
   policy_arn = aws_iam_policy.set_ecs_iam_policy.arn
 }
-
-################################################################################
-### Define outputs
-################################################################################
-
-# output "s3_bucket_name" {
-#   description = "The name of the bucket"
-#   value       = aws_s3_bucket.this.id
-# }

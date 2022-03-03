@@ -3,7 +3,7 @@
 ################################################################################
 
 module "iam" {
-  source = "./modules/iam"
+  source              = "./modules/iam"
   set_username_prefix = var.set_username_prefix
 }
 
@@ -12,8 +12,9 @@ module "iam" {
 ################################################################################
 
 module "ecr" {
-  source = "./modules/ecr"
+  source              = "./modules/ecr"
   set_username_prefix = var.set_username_prefix
+  set_project_path    = var.set_project_path
 }
 
 ################################################################################
@@ -21,8 +22,9 @@ module "ecr" {
 ################################################################################
 
 module "sg" {
-  source = "./modules/sg"
+  source              = "./modules/sg"
   set_username_prefix = var.set_username_prefix
+  set_project_path    = var.set_project_path
 }
 
 ################################################################################
