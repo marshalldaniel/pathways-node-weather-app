@@ -3,9 +3,5 @@ services:
   tf:
     build: ./
     image: contino/terraform
-    volumes:
-      - type: bind
-        source: .
-        target: /opt/app
     working_dir: /opt/app
     env_file: .env

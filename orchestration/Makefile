@@ -1,6 +1,7 @@
-COMPOSE_RUN_TERRAFORM = docker-compose run --rm tf
-COMPOSE_RUN_BASH = docker-compose run --rm --entrypoint bash tf
-COMPOSE_RUN_AWS = docker-compose run --rm --entrypoint aws tf
+export STAGE_FILE
+COMPOSE_RUN_TERRAFORM = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm tf
+COMPOSE_RUN_BASH = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm --entrypoint bash tf
+COMPOSE_RUN_AWS = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm --entrypoint aws tf
 
 .PHONY: run_plan
 run_plan: init plan
