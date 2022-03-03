@@ -23,9 +23,9 @@ version:
 	
 .PHONY: init
 init:
-	$(COMPOSE_RUN_TERRAFORM) init -input=false -var="set_username_prefix=$(USERNAME)" -var="set_project_path=$(PROJECT_PATH)"
-	-$(COMPOSE_RUN_TERRAFORM) validate -var="set_username_prefix=$(USERNAME)" -var="set_project_path=$(PROJECT_PATH)"
-	-$(COMPOSE_RUN_TERRAFORM) fmt -var="set_username_prefix=$(USERNAME)" -var="set_project_path=$(PROJECT_PATH)"
+	$(COMPOSE_RUN_TERRAFORM) init
+	-$(COMPOSE_RUN_TERRAFORM) validate
+	-$(COMPOSE_RUN_TERRAFORM) fmt
 
 .PHONY: plan
 plan:
