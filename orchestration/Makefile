@@ -4,7 +4,7 @@ export PROJECT_PATH
 export ACCOUNT_ID
 export AWS_REGION 
 export REPO_NAME 
-DOCKERFILE = "weather-app-dockerfile"
+DOCKERFILE = "./weather_app/weather-app-dockerfile"
 COMPOSE_RUN_TERRAFORM = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm tf
 COMPOSE_RUN_BASH = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm --entrypoint bash tf
 COMPOSE_RUN_AWS = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm --entrypoint aws tf
@@ -57,12 +57,10 @@ login_ecr:
 
 .PHONY: build_docker
 build_docker: 
-	cd ./weather_app
 	docker build -t $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(USERNAME)$(REPO_NAME):latest -f $(DOCKERFILE) .
 
 .PHONY: push_image
 push_image: 
-	cd ./weather_app
 	docker push $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(USERNAME)$(REPO_NAME):latest
 
 .PHONY: testing
