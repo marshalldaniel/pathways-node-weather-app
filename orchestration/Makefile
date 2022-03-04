@@ -1,5 +1,5 @@
 export STAGE_FILE
-export USERNAME
+export USERNAME = marshalldaniel
 export PROJECT_PATH
 export ACCOUNT_ID
 export AWS_REGION 
