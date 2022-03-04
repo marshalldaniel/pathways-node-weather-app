@@ -4,7 +4,7 @@ export PROJECT_PATH
 export ACCOUNT_ID
 export AWS_REGION 
 export REPO_NAME 
-DOCKERFILE = "weather-app-dockerfile"
+DOCKERFILE = weather-app-dockerfile
 COMPOSE_RUN_TERRAFORM = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm tf
 COMPOSE_RUN_BASH = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm --entrypoint bash tf
 COMPOSE_RUN_AWS = docker-compose -f docker-compose.yml -f $(STAGE_FILE) run --rm --entrypoint aws tf
