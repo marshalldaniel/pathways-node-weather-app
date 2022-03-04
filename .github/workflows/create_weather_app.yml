@@ -1,0 +1,40 @@
+name: create_weather_app
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "create_container_infra"
+    branches:
+      - master
+    types:
+      - completed
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/create_weather_app.yml'
+      - 'container_infra/modules/**'
+      - 'container_infra/**.tf'
+jobs:
+  docker_image_build:
+    defaults:
+      run:
+        working-directory: ./orchestration
+    needs: terraform_apply
+    runs-on: ubuntu-latest
+    env:
+      STAGE_FILE: "docker-compose.weather-app.yml"
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+      ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      REPO_NAME: ${{ secrets.REPO_NAME }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Log into ECR
+      run: make login_ecr
+    - name: Create Docker image
+      run: make build_docker
+    - name: Push Docker image
+      run: make push_image
