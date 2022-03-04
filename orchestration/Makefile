@@ -1,5 +1,5 @@
 export STAGE_FILE
-export USERNAME = marshalldaniel
+export USERNAME
 export PROJECT_PATH
 export ACCOUNT_ID
 export AWS_REGION 
@@ -57,7 +57,7 @@ login_ecr:
 
 .PHONY: build_docker
 build_docker: 
-	docker build -t $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(USERNAME)-$(REPO_NAME):1 -f pathways-node-weather-app/weather_app/$(DOCKERFILE) pathways-node-weather-app/weather_app
+	docker build -t $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(USERNAME)-$(REPO_NAME):1 -f ../weather_app/$(DOCKERFILE) ../weather_app
 
 .PHONY: push_image
 push_image: 
