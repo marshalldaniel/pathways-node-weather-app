@@ -57,7 +57,7 @@ login_ecr:
 
 .PHONY: build_docker
 build_docker: 
-	docker build -t $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(USERNAME)$(REPO_NAME):latest -f ./weather_app/$(DOCKERFILE) .
+	docker build -t $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(USERNAME)$(REPO_NAME):latest -f pathways-node-weather-app/weather_app/$(DOCKERFILE) pathways-node-weather-app/weather_app
 
 .PHONY: push_image
 push_image: 
