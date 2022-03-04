@@ -100,12 +100,12 @@ resource "aws_ssm_parameter" "subnet_public_ids" {
   value = module.terraform_vpc.public_subnets[count.index]
 }
 
-# resource "aws_ssm_parameter" "subnet_public_arns" {
+# resource "aws_ssm_parameter" "subnet_public_az" {
 #   count = length(module.terraform_vpc.public_subnets)
 
-#   name  = "/${var.set_username_prefix}/${var.set_project_path}/subnet/public/${count.index}/arn"
+#   name  = "/${var.set_username_prefix}/${var.set_project_path}/subnet/public/${count.index}/az"
 #   type  = "String"
-#   value = module.terraform_vpc.public_subnet_arns[count.index]
+#   value = module.terraform_vpc.public_subnet_az[count.index]
 # }
 
 resource "aws_ssm_parameter" "subnet_private_ids" {
