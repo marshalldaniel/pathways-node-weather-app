@@ -62,7 +62,3 @@ build_docker:
 .PHONY: push_image
 push_image: 
 	docker push $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(USERNAME)-$(REPO_NAME):1
-
-# .PHONY: testing
-# testing: 
-# 	$(COMPOSE_RUN_AWS) aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
