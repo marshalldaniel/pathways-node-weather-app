@@ -43,3 +43,14 @@ resource "aws_security_group" "set_ecs_sg" {
     security_groups = [aws_security_group.set_alb_sg.id]
   }
 }
+
+################################################################################
+### Outputs
+################################################################################
+
+resource "aws_ssm_parameter" "sg_alb_id" {
+  name  = "/${var.set_username_prefix}/${var.set_project_path}/sg/alb-id"
+  type  = "String"
+  value = aws_security_group.set_alb_sg.id
+}
+

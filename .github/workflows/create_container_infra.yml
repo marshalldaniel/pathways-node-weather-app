@@ -1,6 +1,13 @@
 name: create_container_infra
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "create_network_infra"
+    branches:
+      - master
+    types:
+      - completed
   push:
     branches:
       - master
