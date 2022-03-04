@@ -53,16 +53,16 @@ list_bucket:
 
 .PHONY: login_ecr
 login_ecr: 
-	$(COMPOSE_RUN_AWS) ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
+	aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
 
 .PHONY: build_docker
 build_docker: 
-	docker build -t $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(USERNAME)$(REPO_NAME):latest -f ../weather_app/$(DOCKERFILE) .
+	docker build -t $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(USERNAME)$(REPO_NAME):latest -f ./weather_app/$(DOCKERFILE) .
 
 .PHONY: push_image
 push_image: 
 	docker push $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(USERNAME)$(REPO_NAME):latest
 
-.PHONY: testing
-testing: 
-	$(COMPOSE_RUN_AWS) aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
+# .PHONY: testing
+# testing: 
+# 	$(COMPOSE_RUN_AWS) aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com
