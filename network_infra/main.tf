@@ -13,6 +13,8 @@ module "terraform_vpc" {
   enable_nat_gateway     = var.enable_nat_gateway
   one_nat_gateway_per_az = var.create_nat_gateway_per_az
   tags                   = var.set_custom_tags
+  public_subnet_tags     = var.set_public_subnet_tags
+  private_subnet_tags    = var.set_private_subnet_tags
 }
 
 ################################################################################

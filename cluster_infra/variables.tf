@@ -45,7 +45,7 @@ data "aws_subnet" "public_1" {
 data "aws_subnet" "public_2" {
   filter {
     name   = "availability_zone"
-    values = ["${resource.random_shuffle.az[0]}"]
+    values = ["${resource.random_shuffle.az[1]}"]
   }
   filter {
     name   = "tag:Public_Route"
@@ -67,7 +67,7 @@ data "aws_subnet" "private_1" {
 data "aws_subnet" "private_2" {
   filter {
     name   = "availability_zone"
-    values = ["${resource.random_shuffle.az[0]}"]
+    values = ["${resource.random_shuffle.az[1]}"]
   }
   filter {
     name   = "tag:Public_Route"

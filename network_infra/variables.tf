@@ -1,5 +1,3 @@
-### Network infra vars
-
 ################################################################################
 ### Tag variables
 ################################################################################
@@ -22,6 +20,22 @@ variable "set_project_path" {
   type        = string
   description = "Project name to be used in path of SSM parameters to be exported"
   default     = null
+}
+
+variable "set_public_subnet_tags" {
+  type        = map(string)
+  description = "Tags to identify if public route exists"
+  default = {
+    Public_Route = "true"
+  }
+}
+
+variable "set_private_subnet_tags" {
+  type        = map(string)
+  description = "Tags to identify if public route exists"
+  default = {
+    Public_Route = "false"
+  }
 }
 
 ################################################################################

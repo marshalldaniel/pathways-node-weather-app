@@ -21,6 +21,7 @@ jobs:
       run:
         working-directory: ./orchestration
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
       USERNAME: ${{ secrets.USERNAME }}
       PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
