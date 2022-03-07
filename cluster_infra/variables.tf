@@ -74,3 +74,26 @@ data "aws_subnet" "private_2" {
     values = ["false"]
   }
 }
+
+
+
+################################################################################
+### Subnet vars
+################################################################################
+
+variable "set_public_1_id" {
+  type        = string
+  default     = data.aws_subnet.public_1.id
+}
+variable "set_public_2_id" {
+  type        = string
+  default     = data.aws_subnet.public_2.id
+}
+variable "set_private_1_id" {
+  type        = string
+  default     = data.aws_subnet.private_1.id
+}
+variable "set_private_2_id" {
+  type        = string
+  default     = data.aws_subnet.private_2.id
+}
