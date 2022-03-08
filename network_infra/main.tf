@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
     resources = [
       "${module.s3_bucket.s3_bucket_name_arn}",
       "${module.s3_bucket.s3_bucket_name_arn}/*",
-      ""
+      "arn:aws:s3:::prod-eu-west-1-starport-layer-bucket/*"
     ]
   }
 }
