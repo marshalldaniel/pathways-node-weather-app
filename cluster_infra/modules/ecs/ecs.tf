@@ -63,7 +63,7 @@ resource "aws_ecs_task_definition" "this" {
           "containerPort" : 3000
         }
       ],
-      "name" : "weather-app",
+      "name" : "${var.set_username_prefix}-weather-app",
       "image" : "${data.aws_ecr_repository.this.repository_url}:1",
       "requiresCompatibilities" : [
         "FARGATE"
