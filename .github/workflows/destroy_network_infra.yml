@@ -1,6 +1,13 @@
 name: destroy_network_infra
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "destroy_container_infra"
+    branches:
+      - destroy
+    types:
+      - completed
   push:
     branches:
       - destroy
@@ -15,6 +22,7 @@ jobs:
       run:
         working-directory: ./orchestration
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
       USERNAME: ${{ secrets.USERNAME }}
       PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
@@ -25,7 +33,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Terraform_Destroy_Plan
-      run: make run_destroy_plan       
+      run: make run_destroy_plan
 
   terraform_destroy_apply:
     defaults:
@@ -45,4 +53,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Terraform_Destroy_Apply
-      run: make run_destroy_apply 
+      run: make run_destroy_apply

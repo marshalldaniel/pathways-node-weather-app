@@ -46,4 +46,4 @@ jobs:
     - name: Terraform_Plan
       run: make run_plan
     - name: Terraform_Apply
-      run: make run_apply  
+      run: make run_apply
