@@ -1,0 +1,48 @@
+name: destroy_cluster_infra
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - destroy
+    paths:
+      - '.github/workflows/destroy_cluster_infra.yml'
+      - 'cluster_infra/modules/**'
+      - 'cluster_infra/**.tf'
+
+jobs:
+  terraform_destroy_plan:
+    defaults:
+      run:
+        working-directory: ./orchestration
+    runs-on: ubuntu-latest
+    env:
+      USERNAME: ${{ secrets.USERNAME }}
+      PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
+      STAGE_FILE: "docker-compose.cluster-infra.yml"
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_SESSION_TOKEN:  ${{ secrets.AWS_SESSION_TOKEN }} 
+    steps:
+    - uses: actions/checkout@v2
+    - name: Terraform_Destroy_Plan
+      run: make run_destroy_plan       
+
+  terraform_destroy_apply:
+    defaults:
+      run:
+        working-directory: ./orchestration
+    environment:
+      name: approval
+    needs: terraform_destroy_plan
+    runs-on: ubuntu-latest
+    env:
+      USERNAME: ${{ secrets.USERNAME }}
+      PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
+      STAGE_FILE: "docker-compose.cluster-infra.yml"
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_SESSION_TOKEN:  ${{ secrets.AWS_SESSION_TOKEN }} 
+    steps:
+    - uses: actions/checkout@v2
+    - name: Terraform_Destroy_Apply
+      run: make run_destroy_apply 

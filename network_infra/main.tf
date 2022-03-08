@@ -45,7 +45,8 @@ data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
     }
     resources = [
       "${module.s3_bucket.s3_bucket_name_arn}",
-      "${module.s3_bucket.s3_bucket_name_arn}/*"
+      "${module.s3_bucket.s3_bucket_name_arn}/*",
+      ""
     ]
   }
 }
@@ -76,8 +77,6 @@ resource "aws_vpc_endpoint_route_table_association" "public_associations" {
 ################################################################################
 ### Outputs to SSM Parameter Store
 ################################################################################
-
-# arn:partition:service:region:account-id:resource-id
 locals {
   vpc_region = split(":", "${module.terraform_vpc.vpc_arn}")
 }
@@ -101,14 +100,6 @@ resource "aws_ssm_parameter" "subnet_public_ids" {
   type  = "String"
   value = module.terraform_vpc.public_subnets[count.index]
 }
-
-# resource "aws_ssm_parameter" "subnet_public_az" {
-#   count = length(module.terraform_vpc.public_subnets)
-
-#   name  = "/${var.set_username_prefix}/${var.set_project_path}/subnet/public/${count.index}/az"
-#   type  = "String"
-#   value = module.terraform_vpc.public_subnet_az[count.index]
-# }
 
 resource "aws_ssm_parameter" "subnet_private_ids" {
   count = length(module.terraform_vpc.private_subnets)
