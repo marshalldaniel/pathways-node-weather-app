@@ -18,30 +18,30 @@ variable "alb_tg_arn" {}
 # }
 
 data "aws_iam_role" "this" {
-  # name = "${var.set_username_prefix}EcsExecutionRole"
-  name = "marshalldanielEcsExecutionRole"
+  name = "${var.set_username_prefix}EcsExecutionRole"
+  # name = "marshalldanielEcsExecutionRole"
 }
 
 data "aws_ecr_repository" "this" {
-  # name = "${var.set_username_prefix}-node-weather-app"
-  name = "marshalldaniel-node-weather-app"
+  name = "${var.set_username_prefix}-node-weather-app"
+  # name = "marshalldaniel-node-weather-app"
 }
 
 data "aws_security_group" "this" {
-  name = "weather-app-ecs-sg"
+  name = "${var.set_username_prefix}-weather-app-ecs-sg"
   vpc_id = data.aws_ssm_parameter.vpc_id.value
 }
 
 data "aws_ssm_parameter" "vpc_id" {
-  # name = "/${var.set_username_prefix}/${var.set_project_path}/vpc/id"
-  name = "/marshalldaniel/pathways/weather-app/vpc/id"
+  name = "/${var.set_username_prefix}/${var.set_project_path}/vpc/id"
+  # name = "/marshalldaniel/pathways/weather-app/vpc/id"
 }
 
 ################################################################################
 ### ECS
 ################################################################################
 resource "aws_ecs_cluster" "this" {
-  name = "marshalldaniel-weather-app-cluster"
+  name = "${var.set_username_prefix}-weather-app-cluster"
 
   setting {
     name  = "containerInsights"
@@ -50,7 +50,7 @@ resource "aws_ecs_cluster" "this" {
 }
 
 resource "aws_ecs_task_definition" "this" {
-  family             = "marshalldaniel-weather-app-fam"
+  family             = "${var.set_username_prefix}-weather-app-fam"
   network_mode       = "awsvpc"
   execution_role_arn = data.aws_iam_role.this.arn
   cpu                = 256
@@ -76,13 +76,13 @@ resource "aws_ecs_task_definition" "this" {
 resource "aws_ecs_service" "this" {
   launch_type     = "FARGATE"
   task_definition = aws_ecs_task_definition.this.arn
-  name            = "marshalldaniel-weather-app-service"
+  name            = "${var.set_username_prefix}-weather-app-service"
   cluster         = aws_ecs_cluster.this.id
   desired_count   = 1
 
   load_balancer {
     target_group_arn = var.alb_tg_arn
-    container_name   = "weather-app"
+    container_name   = "${var.set_username_prefix}-weather-app"
     container_port   = 3000
   }
 

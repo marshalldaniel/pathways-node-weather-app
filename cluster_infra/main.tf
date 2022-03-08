@@ -14,15 +14,15 @@ resource "random_shuffle" "az" {
 }
 
 resource "aws_ssm_parameter" "random_az1" {
-  # name  = "/${var.set_username_prefix}/${var.set_project_path}/subnet/private/${count.index}/id"
-  name  = "/marshalldaniel/pathways/weather-app/az1"
+  name  = "/${var.set_username_prefix}/${var.set_project_path}/subnet/private/${count.index}/id"
+  # name  = "/marshalldaniel/pathways/weather-app/az1"
   type  = "String"
   value = resource.random_shuffle.az.result[0]
 }
 
 resource "aws_ssm_parameter" "random_az2" {
-  # name  = "/${var.set_username_prefix}/${var.set_project_path}/subnet/private/${count.index}/id"
-  name  = "/marshalldaniel/pathways/weather-app/az2"
+  name  = "/${var.set_username_prefix}/${var.set_project_path}/subnet/private/${count.index}/id"
+  # name  = "/marshalldaniel/pathways/weather-app/az2"
   type  = "String"
   value = resource.random_shuffle.az.result[1]
 }

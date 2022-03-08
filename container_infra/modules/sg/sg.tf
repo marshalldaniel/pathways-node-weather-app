@@ -17,8 +17,8 @@ locals {
 ################################################################################
 
 resource "aws_security_group" "set_alb_sg" {
-  name        = "weather-app-alb-sg"
-  description = "weather-app-alb-sg"
+  name        = "${var.set_username_prefix}-weather-app-alb-sg"
+  description = "${var.set_username_prefix}-weather-app-alb-sg"
   vpc_id      = local.vpc_id
 
   ingress {
@@ -38,8 +38,8 @@ resource "aws_security_group" "set_alb_sg" {
 }
 
 resource "aws_security_group" "set_ecs_sg" {
-  name        = "weather-app-ecs-sg"
-  description = "weather-app-ecs-sg"
+  name        = "${var.set_username_prefix}-weather-app-ecs-sg"
+  description = "${var.set_username_prefix}-weather-app-ecs-sg"
   vpc_id      = local.vpc_id
 
   ingress {

@@ -8,12 +8,12 @@ variable "public_subnet_2" {}
 
 
 data "aws_ssm_parameter" "vpc_id" {
-  # name = "/${var.set_username_prefix}/${var.set_project_path}/vpc/id"
-  name  = "/marshalldaniel/pathways/weather-app/vpc/id"
+  name = "/${var.set_username_prefix}/${var.set_project_path}/vpc/id"
+  # name  = "/marshalldaniel/pathways/weather-app/vpc/id"
 }
 
 data "aws_security_group" "sg_alb_id" {
-  name = "weather-app-alb-sg"
+  name = "${var.set_username_prefix}-weather-app-alb-sg"
   vpc_id = data.aws_ssm_parameter.vpc_id.value
 }
 
@@ -22,7 +22,7 @@ data "aws_security_group" "sg_alb_id" {
 ################################################################################
 
 resource "aws_lb" "this" {
-  name               = "marshalldaniel-weather-app-alb"
+  name               = "${var.set_username_prefix}-weather-app-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [data.aws_security_group.sg_alb_id.id]
@@ -32,17 +32,12 @@ resource "aws_lb" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  name        = "marshalldaniel-weather-app-tg"
+  name        = "${var.set_username_prefix}-weather-app-tg"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
 }
-
-# resource "aws_lb_target_group_attachment" "this" {
-#   target_group_arn = aws_lb_target_group.this.arn
-#   port             = 80
-# }
 
 resource "aws_lb_listener" "front_end" {
   load_balancer_arn = aws_lb.this.arn
