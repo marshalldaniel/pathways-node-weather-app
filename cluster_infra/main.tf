@@ -1,5 +1,5 @@
 ################################################################################
-### Export azs to ssm to create fixed random list
+### Obtain all AZs in region and randomly select two
 ################################################################################
 data "aws_availability_zones" "az_all" {
   filter {
@@ -13,22 +13,8 @@ resource "random_shuffle" "az" {
   result_count = 2
 }
 
-# resource "aws_ssm_parameter" "random_az1" {
-#   name  = "/${var.set_username_prefix}/${var.set_project_path}/az1"
-#   # name  = "/marshalldaniel/pathways/weather-app/az1"
-#   type  = "String"
-#   value = resource.random_shuffle.az.result[0]
-# }
-
-# resource "aws_ssm_parameter" "random_az2" {
-#   name  = "/${var.set_username_prefix}/${var.set_project_path}/az2"
-#   # name  = "/marshalldaniel/pathways/weather-app/az2"
-#   type  = "String"
-#   value = resource.random_shuffle.az.result[1]
-# }
-
 ################################################################################
-### Obtain subnets in same azs
+### Obtain private and public subnets in same AZs
 ################################################################################
 data "aws_subnet" "public_1" {
   filter {
@@ -93,7 +79,6 @@ output "private_subnet_id2" {
 ################################################################################
 ### ALB
 ################################################################################
-
 module "alb" {
   source              = "./modules/alb"
   set_username_prefix = var.set_username_prefix
@@ -109,7 +94,6 @@ output "alb_url" {
 ################################################################################
 ### ECS
 ################################################################################
-
 module "ecs" {
   source              = "./modules/ecs"
   set_username_prefix = var.set_username_prefix

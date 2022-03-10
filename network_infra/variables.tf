@@ -1,7 +1,6 @@
 ################################################################################
 ### Tag variables
 ################################################################################
-
 variable "set_username_prefix" {
   type        = string
   description = "Name to be used on all the resources as identifier"
@@ -41,7 +40,6 @@ variable "set_private_subnet_tags" {
 ################################################################################
 ### terraform_vpc module variables
 ################################################################################
-
 variable "set_vpc_cidr_range" {
   type        = string
   description = "The CIDR block for the VPC. Default value is a valid CIDR, but not acceptable by AWS and should be overridden"
@@ -93,7 +91,6 @@ variable "set_s3_gateway_endpoint" {
 ################################################################################
 ### S3 module variables
 ################################################################################
-
 variable "bucket" {
   type        = string
   description = "Specifies the name of an S3 Bucket"
@@ -103,7 +100,6 @@ variable "bucket" {
 ################################################################################
 ### Variables to export to SSM parameters
 ################################################################################
-
 resource "aws_ssm_parameter" "set_username_prefix" {
   name  = "/${var.set_username_prefix}/${var.set_project_path}/variables/set_username_prefix"
   type  = "String"

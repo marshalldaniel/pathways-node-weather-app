@@ -1,7 +1,6 @@
 ################################################################################
 ### Reference the terraform_vpc module
 ################################################################################
-
 module "terraform_vpc" {
   source                 = "terraform-aws-modules/vpc/aws"
   name                   = var.set_username_prefix
@@ -20,17 +19,15 @@ module "terraform_vpc" {
 ################################################################################
 ### Reference the s3_bucket module
 ################################################################################
-
-module "s3_bucket" {
-  source = "./modules/s3"
-  bucket = var.bucket
-  tags   = var.set_custom_tags
-}
+# module "s3_bucket" {
+#   source = "./modules/s3"
+#   bucket = var.bucket
+#   tags   = var.set_custom_tags
+# }
 
 ################################################################################
 ### VPC s3 gateway endpoint
 ################################################################################
-
 data "aws_iam_policy_document" "set_gateway_endpoint_policy_document" {
   statement {
     sid = "AccessToSpecificBucket"

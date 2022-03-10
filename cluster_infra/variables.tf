@@ -1,7 +1,6 @@
 ################################################################################
 ### Initial config variables
 ################################################################################
-
 variable "set_username_prefix" {
   type        = string
   description = "Name to be used on all the resources as identifier"

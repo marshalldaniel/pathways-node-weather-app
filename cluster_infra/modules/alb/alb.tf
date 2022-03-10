@@ -6,10 +6,8 @@ variable "set_project_path" {}
 variable "public_subnet_1" {}
 variable "public_subnet_2" {}
 
-
 data "aws_ssm_parameter" "vpc_id" {
   name = "/${var.set_username_prefix}/${var.set_project_path}/vpc/id"
-  # name  = "/marshalldaniel/pathways/weather-app/vpc/id"
 }
 
 data "aws_security_group" "sg_alb_id" {
@@ -20,7 +18,6 @@ data "aws_security_group" "sg_alb_id" {
 ################################################################################
 ### ALB
 ################################################################################
-
 resource "aws_lb" "this" {
   name               = "${var.set_username_prefix}-weather-app-alb"
   internal           = false

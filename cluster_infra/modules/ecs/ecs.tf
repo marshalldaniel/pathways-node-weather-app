@@ -7,24 +7,12 @@ variable "private_subnet_1" {}
 variable "private_subnet_2" {}
 variable "alb_tg_arn" {}
 
-# data "aws_ssm_parameter" "private_1_id" {
-#   # name = "/${var.set_username_prefix}/${var.set_project_path}/vpc/id"
-#   name = "/marshalldaniel/pathways/weather-app/az2"
-# }
-
-# data "aws_ssm_parameter" "private_2_id" {
-#   # name = "/${var.set_username_prefix}/${var.set_project_path}/vpc/id"
-#   name = "/marshalldaniel/pathways/weather-app/az2"
-# }
-
 data "aws_iam_role" "this" {
   name = "${var.set_username_prefix}EcsExecutionRole"
-  # name = "marshalldanielEcsExecutionRole"
 }
 
 data "aws_ecr_repository" "this" {
   name = "${var.set_username_prefix}-node-weather-app"
-  # name = "marshalldaniel-node-weather-app"
 }
 
 data "aws_security_group" "this" {
@@ -34,7 +22,6 @@ data "aws_security_group" "this" {
 
 data "aws_ssm_parameter" "vpc_id" {
   name = "/${var.set_username_prefix}/${var.set_project_path}/vpc/id"
-  # name = "/marshalldaniel/pathways/weather-app/vpc/id"
 }
 
 ################################################################################
@@ -72,7 +59,6 @@ resource "aws_ecs_task_definition" "this" {
   ])
 }
 
-# create ECS service (deploy weather-app container)
 resource "aws_ecs_service" "this" {
   launch_type     = "FARGATE"
   task_definition = aws_ecs_task_definition.this.arn
