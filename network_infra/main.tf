@@ -19,11 +19,11 @@ module "terraform_vpc" {
 ################################################################################
 ### Reference the s3_bucket module
 ################################################################################
-# module "s3_bucket" {
-#   source = "./modules/s3"
-#   bucket = var.bucket
-#   tags   = var.set_custom_tags
-# }
+module "s3_bucket" {
+  source = "./modules/s3"
+  bucket = var.bucket
+  tags   = var.set_custom_tags
+}
 
 ################################################################################
 ### VPC s3 gateway endpoint
